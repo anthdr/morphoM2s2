@@ -1,0 +1,11 @@
+here are the four datasets you should take a look at: 
+Hausa nominal inflection, 
+Eastern Highland Otomi verbal inflection, 
+Russian masculine Diminutives, and 
+Spanish verbal inflection.
+
+For the project you need to:
+- Read on the languages and the description of the phenomena
+- Explore the different models we discussed
+- Explore different predictors and predictor combinations
+- Report what you find
