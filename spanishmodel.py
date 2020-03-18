@@ -9,12 +9,24 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 # load the dataset
 data = pd.read_csv("origin/spanish-paradigm.csv")
-vectorizer = CountVectorizer(analyzer='char_wb', ngram_range=(2, 2), min_df=1) 
-X = vectorizer.fit_transform(data['stem'])
-vectorizer.get_feature_names()
-X = pd.DataFrame(X.todense())
+
+#X = ngrams(data['stem'], 2)
+
+
+
+X = CountVectorizer(data['stem'],ngram_range=(2,2),analyzer='char_wb', lowercase=False)
+X = X.fit_transform(data['stem'])
+
+#vectorizer = CountVectorizer(analyzer='char_wb', ngram_range=(2, 2), min_df=1) 
+#X = vectorizer.fit_transform(data['stem'])
+#vectorizer.get_feature_names()
+#X = pd.DataFrame(X.todense())
+
+X.vocabulary_
 print(X)
 print(type(X))
+
+
 # split into input (X) and output (y) variables
 y = data['class']
 labelencoder = LabelEncoder()
