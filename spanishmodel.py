@@ -17,6 +17,7 @@ data = pd.read_csv("origin/spanish-paradigm.csv")
 
 cv = CountVectorizer(ngram_range=(2,2),analyzer='char_wb', lowercase=False)
 X = cv.fit_transform(data['stem'])
+print(cv.vocabulary_)
 X = X.todense()
 
 
@@ -59,11 +60,12 @@ print(history.history.get('val_loss')[-1])
 
 print('\n \n \n \n')
 
-test_dummy = 'acrezent'
+test_dummy = 'abalanz'
 test_dummy = [test_dummy]
 
-test_dummy = cv.fit_transform(test_dummy)
-print(cv.vocabulary_)
+cv_test = CountVectorizer(ngram_range=(2,2),analyzer='char_wb', lowercase=False)
+test_dummy = cv_test.fit_transform(test_dummy)
+print(cv_test.vocabulary_)
 print(type(test_dummy))
 print(test_dummy)
 test_dummy = test_dummy.todense()
@@ -78,3 +80,5 @@ test_dummy = np.ones(X.shape)*fill_value
 
 #print(test)
 
+#{' a': 3, 'ab': 42, 'ba': 62, 'al': 50, 'la': 170, 'an': 52, 'nz': 215, 'z ': 327,
+#{' a': 0, 'ab': 1, 'ba': 5, 'al': 2, 'la': 6, 'an': 3, 'nz': 7, 'za': 9, 'ar': 4, 'r ': 8}
