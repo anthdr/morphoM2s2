@@ -60,9 +60,8 @@ print(history.history.get('accuracy')[-1])
 print('val_loss is at:')
 print(history.history.get('val_loss')[-1])
 
-
-
 print('\n \n')
+
 def test(name):
     namestem = str(name)
     testem = namestem
