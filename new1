@@ -14,19 +14,6 @@ sgd mieux pour les rnn ?
 
 
 
-map sortie col
-revoir boucle pour kfold
-
-
-def test(x):
-    namestem = x
-    testem = namestem
-    test_dummy = testem
-    test_dummy = [test_dummy]
-    test_dummy = cv.transform(test_dummy)
-    test_dummy = test_dummy.todense()
-    testmodel = model.predict_classes(test_dummy)
-    print('prediction class for')
-    print(namestem)
-    print('is')
-    print((col[int(testmodel)]))
+-boucle pour kfold
+-batch generator
+-passer en RNN
