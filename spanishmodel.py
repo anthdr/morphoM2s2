@@ -63,8 +63,8 @@ print(history.history.get('val_loss')[-1])
 print('\n \n')
 
 def test(x):
-    return str(x)
-    namestem = str(name)
+    return x
+    namestem = x
     testem = namestem
     test_dummy = testem
     test_dummy = [test_dummy]
