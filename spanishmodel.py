@@ -63,7 +63,6 @@ print(history.history.get('val_loss')[-1])
 print('\n \n')
 
 def test(x):
-    return x
     namestem = x
     testem = namestem
     test_dummy = testem
@@ -72,6 +71,6 @@ def test(x):
     test_dummy = test_dummy.todense()
     testmodel = model.predict_classes(test_dummy)
     print('prediction class for')
-    print(testem)
+    print(namestem)
     print('is')
     print((col[int(testmodel)]))
