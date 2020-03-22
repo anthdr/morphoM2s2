@@ -1,0 +1,18 @@
+sigmoid binaire
+softmax multiclass
+
+reg 0 1
+noreg 1 0
+donc 2 sortie
+donc changer loss
+
+pour adam, juste lr - mettre bas pour les petits set de données
+
+
+sgd mieux pour les rnn ?
+
+
+
+
+map sortie col
+revoir boucle pour kfold

@@ -53,22 +53,24 @@ for train_index,test_index in KFold(nfold).split(X):
     histories.append(history)
 
 
+print('\n \n')
 
+print('accuracy is at:')
 print(history.history.get('accuracy')[-1])
+print('val_loss is at:')
 print(history.history.get('val_loss')[-1])
 
-print('\n \n \n \n')
 
-test_dummy = 'acord'
-test_dummy = [test_dummy]
-test_dummy = cv.transform(test_dummy)
-test_dummy = test_dummy.todense()
 
-print('\n')
-test = model.predict(test_dummy)
-print(test)
-print('\n')
-test = model.predict_classes(test_dummy)
-print(test)
-print('\n')
-
+print('\n \n')
+def test():
+    testem = 'acord'
+    test_dummy = testem
+    test_dummy = [test_dummy]
+    test_dummy = cv.transform(test_dummy)
+    test_dummy = test_dummy.todense()
+    testmodel = model.predict_classes(test_dummy)
+    print('prediction class for')
+    print(testem)
+    print('is')
+    print((col[int(testmodel)]))
