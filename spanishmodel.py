@@ -43,12 +43,12 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 
 # fit the keras model on the dataset
 scores, histories = list(), list()
-nfold = 3
+nfold = 5
 kfold = KFold(nfold, shuffle=True, random_state=1)
 for train_index,test_index in KFold(nfold).split(X):
     x_train,x_test = X[train_index],X[test_index]
     y_train,y_test = y[train_index],y[test_index]
-    history = model.fit(x_train, y_train, validation_split=0.2, epochs=32, batch_size=16, verbose=0)
+    history = model.fit(x_train, y_train, validation_split=0.2, epochs=32, batch_size=16, verbose=1)
     print('Model evaluation ',model.evaluate(x_test,y_test))
     #_, acc = model.evaluate(x_train, y_train, verbose=1)
     #scores.append(acc)
