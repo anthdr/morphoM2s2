@@ -63,8 +63,9 @@ print(history.history.get('val_loss')[-1])
 
 
 print('\n \n')
-def test():
-    testem = 'acord'
+def test(name):
+    namestem = str(name)
+    testem = namestem
     test_dummy = testem
     test_dummy = [test_dummy]
     test_dummy = cv.transform(test_dummy)
