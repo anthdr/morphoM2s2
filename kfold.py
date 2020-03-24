@@ -3,7 +3,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import KFold
 from sklearn.metrics import confusion_matrix
 from keras import optimizers
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
 from keras.models import Sequential
 import keras
 import sys
@@ -12,6 +12,7 @@ import numpy as np
 
 
 np.set_printoptions(threshold=sys.maxsize)
+pd.set_option('display.max_columns', None)
 
 
 # load the dataset
@@ -33,13 +34,16 @@ y_count = y.shape[1]
 
 
 cvscores = []
+cfms = pd.DataFrame(np.zeros((len(col), len(col))), col, col)
 nfold = 5
 kfold = KFold(n_splits=nfold, shuffle=True, random_state=1)
 for train_index, test_index in kfold.split(X, y):
     # define the keras model
     model = Sequential()
     model.add(Dense(128, input_dim=X.shape[1], activation='relu'))
+    model.add(Dropout(0.5))
     model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.5))
     model.add(Dense(y_count, activation='softmax'))
 
     # compile the keras model
@@ -59,6 +63,7 @@ for train_index, test_index in kfold.split(X, y):
                            labels=[i for i in range(y_count)]
                            )
     cfm = pd.DataFrame(cfm, col, col)
+    cfms += cfm
     print(cfm)
 
 
@@ -68,6 +73,7 @@ print('mean accuracy is at: %s' % np.mean(list(zip(*cvscores))[1]))
 print('accuracy std is at: %s' % np.std(list(zip(*cvscores))[1]))
 print('mean val_loss is at: %s' % np.mean(list(zip(*cvscores))[0]))
 print('val_loss std is at: %s' % np.std(list(zip(*cvscores))[0]))
+print('mean cfm:\n', cfms/nfold)
 
 print('\n')
 
