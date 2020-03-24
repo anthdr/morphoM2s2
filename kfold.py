@@ -1,6 +1,7 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import KFold
+from sklearn.metrics import confusion_matrix
 from keras import optimizers
 from keras.layers import Dense
 from keras.models import Sequential
@@ -8,11 +9,13 @@ import keras
 import sys
 import pandas as pd
 import numpy as np
+
+
 np.set_printoptions(threshold=sys.maxsize)
 
 
 # load the dataset
-data = pd.read_csv("../data/spanish-paradigm.csv")
+data = pd.read_csv("origin/spanish-paradigm.csv")
 
 
 # prepare X
@@ -37,7 +40,7 @@ for train_index, test_index in kfold.split(X, y):
     model = Sequential()
     model.add(Dense(128, input_dim=X.shape[1], activation='relu'))
     model.add(Dense(128, activation='relu'))
-    model.add(Dense(y_count, activation='sigmoid'))
+    model.add(Dense(y_count, activation='softmax'))
 
     # compile the keras model
     sgd = optimizers.adam(lr=0.01)
@@ -51,6 +54,12 @@ for train_index, test_index in kfold.split(X, y):
               epochs=32, batch_size=16, verbose=1)
     cvscores.append(model.evaluate(x_test, y_test))
     print('Model evaluation ', cvscores[-1])
+    cfm = confusion_matrix(np.argmax(y_test, axis=1),
+                           model.predict_classes(x_test),
+                           labels=[i for i in range(y_count)]
+                           )
+    cfm = pd.DataFrame(cfm, col, col)
+    print(cfm)
 
 
 print('\n')
