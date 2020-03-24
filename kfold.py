@@ -2,6 +2,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import KFold
 from sklearn.metrics import confusion_matrix
+from sklearn.utils.class_weight import compute_class_weight
 from keras import optimizers
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
@@ -44,18 +45,33 @@ for train_index, test_index in kfold.split(X, y):
     model.add(Dropout(0.5))
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
+    # need to use softmax instead of sigmoid 'cause it's multiclass classification
     model.add(Dense(y_count, activation='softmax'))
 
     # compile the keras model
-    sgd = optimizers.adam(lr=0.01)
-    model.compile(loss='binary_crossentropy',
-                  optimizer='adam', metrics=['accuracy'])
+    opt = optimizers.Adam(lr=0.01)
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=opt, metrics=['accuracy'])  # need to use categorical instead of binary crossentropy since it's multiclass
 
     # fit the keras model on the dataset
     x_train, x_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
-    model.fit(x_train, y_train, validation_split=0.2,
-              epochs=32, batch_size=16, verbose=1)
+
+    y_train_dig = np.argmax(y_train, axis=1)
+    class_weight = compute_class_weight('balanced',
+                                        np.unique(y_train_dig),
+                                        y_train_dig
+                                        )
+    class_weight = {k: v for k, v in enumerate(class_weight)}
+
+    model.fit(x_train,
+              y_train,
+              validation_split=0.1,
+              epochs=10,
+              batch_size=32,
+              verbose=1,
+              class_weight=class_weight
+              )
     cvscores.append(model.evaluate(x_test, y_test))
     print('Model evaluation ', cvscores[-1])
     cfm = confusion_matrix(np.argmax(y_test, axis=1),
