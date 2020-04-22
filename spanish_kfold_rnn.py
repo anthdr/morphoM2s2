@@ -41,13 +41,15 @@ kfold = KFold(n_splits=nfold, shuffle=True, random_state=1)
 for train_index, test_index in kfold.split(X, y):
     # define the keras model
     model = Sequential()
-    model.add(Embedding(X.shape[1], y_count, input_length=None))
+    model.add(Embedding(X.shape[1], 128, input_length=None))
     model.add(LSTM(100))
-    model.add(Dense(y_count, activation='sigmoid'))
+    #model.add(Dense(y_count, activation='sigmoid'))
+    model.add(Dense(y_count, activation='softmax'))
 
     # compile the keras model
     sgd = optimizers.adam(lr=0.01)
-    model.compile(loss='binary_crossentropy',
+    #model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy',
                   optimizer='adam', metrics=['accuracy'])
 
     # fit the keras model on the dataset
