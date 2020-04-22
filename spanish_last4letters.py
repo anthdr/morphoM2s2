@@ -9,7 +9,7 @@ import keras
 import sys
 import pandas as pd
 import numpy as np
-
+from numpy import array
 
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -19,11 +19,10 @@ data = pd.read_csv("origin/spanish-paradigm.csv")
 
 
 # prepare X
-X = data['stem']
-X = pd.Series(X).str.replace('[:-4]', '', regex=False)
-cv = CountVectorizer(ngram_range=(2, 2), analyzer='char_wb', lowercase=False)
-X = cv.fit_transform(X)
-X = X.todense()
+X = data['stem'].str[-4:]
+X = X.str.zfill(4) 
+
+
 
 # prepare y
 y = data['class']

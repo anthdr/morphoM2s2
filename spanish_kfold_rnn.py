@@ -28,6 +28,7 @@ X = X.todense()
 
 # prepare y
 y = data['class']
+y = pd.Series(y).str.replace('-.*', '', regex=True)
 y = pd.get_dummies(y)
 col = y.columns
 y = y.values
