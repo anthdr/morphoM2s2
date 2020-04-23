@@ -1,15 +1,20 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import KFold
 from sklearn.metrics import confusion_matrix
 from keras import optimizers
 from keras.layers import Dense
 from keras.models import Sequential
+from numpy import array
+from numpy import argmax
 import keras
 import sys
 import pandas as pd
 import numpy as np
-from numpy import array
+
+
+
 
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -20,7 +25,19 @@ data = pd.read_csv("origin/spanish-paradigm.csv")
 
 # prepare X
 X = data['stem'].str[-4:]
-X = X.str.zfill(4) 
+X = X.str.zfill(4)
+X = pd.DataFrame(data=X)
+X["n4"] = ""
+X["n4"] = X['stem'].str.strip().str[-4]
+X["n3"] = ""
+X["n3"] = X['stem'].str.strip().str[-3]
+X["n2"] = ""
+X["n2"] = X['stem'].str.strip().str[-2]
+X["n1"] = ""
+X["n1"] = X['stem'].str.strip().str[-1]
+X = X.drop('stem', 1)
+
+X = OneHotEncoder().fit_transform(X)
 
 
 
@@ -39,12 +56,12 @@ kfold = KFold(n_splits=nfold, shuffle=True, random_state=1)
 for train_index, test_index in kfold.split(X, y):
     # define the keras model
     model = Sequential()
-    model.add(Dense(128, input_dim=X.shape[1], activation='relu'))
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(16, input_dim=X.shape[1], activation='relu'))
+    model.add(Dense(16, activation='relu'))
     model.add(Dense(y_count, activation='softmax'))
 
     # compile the keras model
-    sgd = optimizers.adam(lr=0.01)
+    sgd = optimizers.adam(lr=0.05)
     model.compile(loss='binary_crossentropy',
                   optimizer='adam', metrics=['accuracy'])
 
@@ -52,7 +69,7 @@ for train_index, test_index in kfold.split(X, y):
     x_train, x_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
     model.fit(x_train, y_train, validation_split=0.2,
-              epochs=32, batch_size=16, verbose=1)
+              epochs=16, batch_size=8, verbose=1)
     cvscores.append(model.evaluate(x_test, y_test))
     print('Model evaluation ', cvscores[-1])
     cfm = confusion_matrix(np.argmax(y_test, axis=1),
