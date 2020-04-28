@@ -36,7 +36,9 @@ X["n1"] = X['stem'].str.strip().str[-1]
 X = X.drop('stem', 1)
 """
 
-X = OneHotEncoder().fit_transform(X)
+#enc = OneHotEncoder()
+enc = OrdinalEncoder()
+X = enc.fit_transform(X)
 
 
 # prepare y
@@ -102,7 +104,7 @@ def test(x):
     test_dummy["n1"] = ""
     test_dummy["n1"] = test_dummy['stem'].str.strip().str[-1]
     test_dummy = test_dummy.drop('stem', 1)
-    test_dummy = OneHotEncoder().transform(test_dummy)
+    test_dummy = enc.transform(test_dummy)
     testmodel = model.predict_classes(test_dummy)
     print('prediction class for')
     print(namestem)
