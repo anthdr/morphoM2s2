@@ -7,7 +7,7 @@ from numpy import array
 import keras
 from keras import optimizers
 from keras.layers import Dense
-from keras.layers import Dense
+from keras.layers import LSTM
 from keras.layers.embeddings import Embedding
 from keras.models import Sequential
 from imblearn.keras import BalancedBatchGenerator

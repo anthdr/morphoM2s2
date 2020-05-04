@@ -7,7 +7,7 @@ from numpy import array
 import keras
 from keras import optimizers
 from keras.layers import Dense
-from keras.layers import Dense
+from keras.layers import LSTM
 from keras.layers.embeddings import Embedding
 from keras.models import Sequential
 from imblearn.keras import BalancedBatchGenerator
@@ -60,9 +60,9 @@ kfold = KFold(n_splits=nfold, shuffle=True, random_state=1)
 for train_index, test_index in kfold.split(X, y):
     # define the keras model
     model = Sequential()
-    model.add(Dense(32, input_dim=X.shape[1], activation='relu'))
+    model.add(Dense(128, input_dim=X.shape[1], activation='relu'))
     #dropout?
-    model.add(Dense(32, activation='relu'))
+    model.add(Dense(128, activation='relu'))
     model.add(Dense(y_count, activation='softmax'))
 
     # compile the keras model
