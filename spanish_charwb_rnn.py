@@ -1,18 +1,23 @@
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import KFold
-from sklearn.metrics import confusion_matrix
+import pandas as pd
+import sys
+import numpy as np
+from numpy import argmax
+from numpy import array
+
+import keras
 from keras import optimizers
 from keras.layers import Dense
-from keras.models import Sequential
-import keras
-import sys
-import pandas as pd
-import numpy as np
-from keras.layers import LSTM
+from keras.layers import Dense
 from keras.layers.embeddings import Embedding
+from keras.models import Sequential
 from imblearn.keras import BalancedBatchGenerator
 from imblearn.under_sampling import NearMiss
+
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import KFold
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder, OrdinalEncoder
 
 
 np.set_printoptions(threshold=sys.maxsize)

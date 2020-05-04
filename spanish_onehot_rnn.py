@@ -28,18 +28,9 @@ data = pd.read_csv("origin/spanish-paradigm.csv")
 
 
 # prepare X
-X = data['stem'].str[-4:]
-X = X.str.zfill(4)
+X = data['stem']
+X = X.str.zfill(15)
 X = pd.DataFrame(data=X)
-X["n4"] = ""
-X["n4"] = X['stem'].str.strip().str[-4]
-X["n3"] = ""
-X["n3"] = X['stem'].str.strip().str[-3]
-X["n2"] = ""
-X["n2"] = X['stem'].str.strip().str[-2]
-X["n1"] = ""
-X["n1"] = X['stem'].str.strip().str[-1]
-X = X.drop('stem', 1)
 
 X = OneHotEncoder().fit_transform(X)
 
@@ -72,7 +63,7 @@ for train_index, test_index in kfold.split(X, y):
     x_train, x_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
     training_generator = BalancedBatchGenerator(X, y, sampler=NearMiss(), batch_size=8, random_state=42)
-    model.fit_generator(generator=training_generator, epochs=32, verbose=1)
+    model.fit_generator(generator=training_generator, epochs=8, verbose=1)
     cvscores.append(model.evaluate(x_test, y_test))
     print('Model evaluation ', cvscores[-1])
     print('\n')
