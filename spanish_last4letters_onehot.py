@@ -12,7 +12,8 @@ import keras
 import sys
 import pandas as pd
 import numpy as np
-
+from imblearn.keras import BalancedBatchGenerator
+from imblearn.under_sampling import NearMiss
 
 
 
@@ -56,6 +57,7 @@ for train_index, test_index in kfold.split(X, y):
     # define the keras model
     model = Sequential()
     model.add(Dense(32, input_dim=X.shape[1], activation='relu'))
+    #dropout?
     model.add(Dense(32, activation='relu'))
     model.add(Dense(y_count, activation='softmax'))
 
@@ -67,8 +69,8 @@ for train_index, test_index in kfold.split(X, y):
     # fit the keras model on the dataset
     x_train, x_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
-    model.fit(x_train, y_train, validation_split=0.2,
-              epochs=8, batch_size=4, verbose=1)
+    training_generator = BalancedBatchGenerator(X, y, sampler=NearMiss(), batch_size=8, random_state=42)
+    model.fit_generator(generator=training_generator, epochs=32, verbose=1)
     cvscores.append(model.evaluate(x_test, y_test))
     print('Model evaluation ', cvscores[-1])
     print('\n')
