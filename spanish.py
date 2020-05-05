@@ -43,6 +43,8 @@ y_count = y.shape[1]
 
 cvscores = []
 nfold = 5
+cfms = np.zeros((nfold, y_count, y_count))
+n = 0
 kfold = KFold(n_splits=nfold, shuffle=True, random_state=1)
 for train_index, test_index in kfold.split(X, y):
     # define the keras model
@@ -53,7 +55,7 @@ for train_index, test_index in kfold.split(X, y):
 
     # compile the keras model
     sgd = optimizers.adam(lr=0.01)
-    model.compile(loss='binary_crossentropy',
+    model.compile(loss='categorical_crossentropy',
                   optimizer='adam', metrics=['accuracy'])
 
     # fit the keras model on the dataset
@@ -67,6 +69,8 @@ for train_index, test_index in kfold.split(X, y):
                            model.predict_classes(x_test),
                            labels=[i for i in range(y_count)]
                            )
+    cfms[n::] = cfm
+    n += 1
     cfm = pd.DataFrame(cfm, col, col)
     print(cfm)
 
@@ -77,6 +81,10 @@ print('mean accuracy is at: %s' % np.mean(list(zip(*cvscores))[1]))
 print('accuracy std is at: %s' % np.std(list(zip(*cvscores))[1]))
 print('mean val_loss is at: %s' % np.mean(list(zip(*cvscores))[0]))
 print('val_loss std is at: %s' % np.std(list(zip(*cvscores))[0]))
+print('mean confusion_matrix:\n%s' %
+      pd.DataFrame(np.mean(cfms, axis=0), col, col))
+print('confusion_matrix std:\n%s' %
+      pd.DataFrame(np.std(cfms, axis=0), col, col))
 
 print('\n')
 
