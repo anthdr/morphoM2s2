@@ -30,7 +30,7 @@ data = pd.read_csv("origin/spanish-paradigm.csv")
 
 # prepare X
 X = pd.DataFrame()
-for i in range(4, 0, -1):
+for i in range(15, 0, -1):
     X["n%d" % i] = data['stem'].str[-i]
 X = X.fillna("0")
 

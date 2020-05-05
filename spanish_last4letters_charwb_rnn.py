@@ -65,7 +65,7 @@ for train_index, test_index in kfold.split(X, y):
     x_train, x_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
     training_generator = BalancedBatchGenerator(X, y, sampler=NearMiss(), batch_size=8, random_state=42)
-    model.fit_generator(generator=training_generator, epochs=2, verbose=1)
+    model.fit_generator(generator=training_generator, epochs=8, verbose=1)
     cvscores.append(model.evaluate(x_test, y_test))
     print('Model evaluation ', cvscores[-1])
     print('\n')
@@ -73,6 +73,8 @@ for train_index, test_index in kfold.split(X, y):
                            model.predict_classes(x_test),
                            labels=[i for i in range(y_count)]
                            )
+    cfms[n::] = cfm
+    n += 1
     cfm = pd.DataFrame(cfm, col, col)
     print(cfm)
 
@@ -83,7 +85,10 @@ print('mean accuracy is at: %s' % np.mean(list(zip(*cvscores))[1]))
 print('accuracy std is at: %s' % np.std(list(zip(*cvscores))[1]))
 print('mean val_loss is at: %s' % np.mean(list(zip(*cvscores))[0]))
 print('val_loss std is at: %s' % np.std(list(zip(*cvscores))[0]))
-
+print('mean confusion_matrix:\n%s' %
+      pd.DataFrame(np.mean(cfms, axis=0), col, col))
+print('confusion_matrix std:\n%s' %
+      pd.DataFrame(np.std(cfms, axis=0), col, col))
 print('\n')
 
 
