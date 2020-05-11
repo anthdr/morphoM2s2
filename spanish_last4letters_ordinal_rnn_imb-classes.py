@@ -30,7 +30,7 @@ data = pd.read_csv("origin/spanish-paradigm.csv")
 
 # prepare X
 X = pd.DataFrame()
-for i in range(15, 0, -1):
+for i in range(4, 0, -1):
     X["n%d" % i] = data['stem'].str[-i]
 X = X.fillna("0")
 
@@ -67,7 +67,7 @@ for train_index, test_index in kfold.split(X, y):
     # fit the keras model on the dataset
     x_train, x_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
-    training_generator = BalancedBatchGenerator(X, y, sampler=NearMiss(), batch_size=18, random_state=42)
+    training_generator = BalancedBatchGenerator(X, y, sampler=NearMiss(), batch_size=16, random_state=42)
     model.fit_generator(generator=training_generator, epochs=16, verbose=1)
     
     cvscores.append(model.evaluate(x_test, y_test))
