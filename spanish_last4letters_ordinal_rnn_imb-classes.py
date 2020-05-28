@@ -34,6 +34,20 @@ for i in range(4, 0, -1):
     X["n%d" % i] = data['stem'].str[-i]
 X = X.fillna("0")
 
+Z = pd.DataFrame()
+Z = data['class']
+Z = pd.Series(Z).str.replace('ar-', '', regex=True)
+Z = pd.Series(Z).str.replace('er-', '', regex=True)
+Z = pd.Series(Z).str.replace('ir-', '', regex=True)
+Z = pd.Series(Z).str.replace('regular', 'regul', regex=True)
+Z = pd.Series(Z).str.replace('db-t', 'noreg', regex=False)
+Z = pd.Series(Z).str.replace('e-i', 'noreg', regex=False)
+Z = pd.Series(Z).str.replace('L', 'noreg', regex=False)
+Z = pd.Series(Z).str.replace('G', 'noreg', regex=False)
+Z = pd.Series(Z).str.replace('z-zc', 'noreg', regex=False)
+
+X['ireg'] = Z
+
 enc = OrdinalEncoder()
 X = enc.fit_transform(X)
 
